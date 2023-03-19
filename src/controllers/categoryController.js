@@ -1,4 +1,5 @@
 import Category from '../models/Category';
+import Tutorial from '../models/Tutorial';
 
 class CategoryController {
   async create(req, res) {
@@ -16,10 +17,18 @@ class CategoryController {
     try {
       const { id } = req.params;
       if (!id) return res.status(400).json({ errors: ['ID da categoria não informado'] });
-      const category = await Category.findByPk(id);
+      const category = await Category.findByPk(id, {
+        attributes: ['id', 'name'],
+        include: [{
+          model: Tutorial,
+          attributes: ['id', 'name'],
+        }],
+      });
       if (!category) return res.status(400).json({ errors: ['Categoria não existe'] });
-      const { name } = category;
-      return res.json({ id, name });
+      const { name, Tutorials } = category;
+      console.log(category);
+
+      return res.json({ id, name, Tutorials });
     } catch (e) {
       console.log(e);
       res.status(400).json({ errors: e.errors.map((err) => err.message) });

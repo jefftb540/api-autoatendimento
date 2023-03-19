@@ -68,7 +68,7 @@ class StepController {
           req.body.image = `${process.env.SERVER_URL}:${process.env.SERVER_PORT}/images/${filename}`;
         }
         const step = await Step.findByPk(req.params.id);
-        const updatedStep = await step.update(req.body);
+        const updatedStep = await (await step.update(req.body)).save();
         return res.json(updatedStep);
       } catch (e) {
         console.log(e);

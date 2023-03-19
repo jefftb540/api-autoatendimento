@@ -6,12 +6,13 @@ class TutorialController {
   async create(req, res) {
     try {
       console.log(req.body);
-      const newTutorial = await Tutorial.create(req.body);
-      // TODO fix this const { name } = newTutorial;
+      const newTutorial = await Tutorial.create(req.body, { include: Step });
+
       return res.json(newTutorial);
     } catch (e) {
       console.log(e);
-      res.status(400).json({ errors: e.errors.map((err) => err.message) });
+      res.status(400).json({ errors: '' });
+      // res.status(400).json({ errors: e.errors.map((err) => err.message) });
     }
   }
 
@@ -26,7 +27,7 @@ class TutorialController {
           attributes: ['name'],
         }, {
           model: Step,
-          attributes: ['step'],
+          attributes: ['id', 'step', 'image', 'tutorial_id'],
         }],
       });
       if (!tutorial) return res.status(400).json({ errors: ['Tutorial não existe'] });
@@ -47,7 +48,7 @@ class TutorialController {
           attributes: ['name'],
         }, {
           model: Step,
-          attributes: ['step'],
+          attributes: ['id', 'step'],
         }],
       });
       if (!tutorials) return res.status(400).json({ errors: ['Não existem tutoriais'] });
@@ -62,8 +63,21 @@ class TutorialController {
     try {
       const { id } = req.params;
       if (!id) return res.status(400).json({ errors: ['ID do tutorial não informado'] });
-      const tutorial = await Tutorial.findByPk(id);
+      const tutorial = await Tutorial.findByPk(id, {
+        include: [{
+          model: Category,
+          attributes: ['name'],
+        }, {
+          model: Step,
+          attributes: ['id', 'step', 'tutorial_id'],
+        }],
+      });
       if (!tutorial) return res.status(400).json({ errors: ['Tutorial não existe'] });
+      console.log(tutorial);
+      await tutorial.Steps.forEach((step) => { step.destroy(); });
+      await req.body.Steps.forEach((step) => { step.tutorial_id = id; });
+
+      await Step.bulkCreate(req.body.Steps);
       const updatedTutorial = await tutorial.update(req.body);
       return res.json(updatedTutorial);
     } catch (e) {
