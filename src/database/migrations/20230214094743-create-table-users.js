@@ -14,12 +14,6 @@ module.exports = {
         allowNull: false,
       },
 
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
-
       ifrn_id: {
         type: Sequelize.STRING,
         allowNull: false,
