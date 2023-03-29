@@ -11,15 +11,6 @@ import './database/index';
 
 dotenv.config();
 
-const whitelist = process.env.CORS_WHITELIST.split(',');
-console.log(whitelist[0]);
-const corsOptions = {
-  origin(origin, callback) {
-    if (whitelist.indexOf(origin) !== -1 || !origin) callback(null, true);
-    else callback(new Error('Not Allowed by Cors'));
-  },
-};
-
 class App {
   constructor() {
     this.app = express();
@@ -31,7 +22,7 @@ class App {
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
     this.app.use(express.static(resolve(__dirname, '..', 'uploads')));
-    this.app.use(cors(corsOptions));
+    this.app.use(cors());
   }
 
   routes() {
