@@ -9,7 +9,7 @@ class CategoryController {
       return res.json({ name });
     } catch (e) {
       console.log(e);
-      res.status(400).json({ errors: e.errors.map((err) => err.message) });
+      return res.status(400).json({ errors: e.errors.map((err) => err.message) });
     }
   }
 
@@ -31,7 +31,7 @@ class CategoryController {
       return res.json({ id, name, Tutorials });
     } catch (e) {
       console.log(e);
-      res.status(400).json({ errors: e.errors.map((err) => err.message) });
+      return res.status(400).json({ errors: e.errors.map((err) => err.message) });
     }
   }
 
@@ -41,7 +41,7 @@ class CategoryController {
       return res.json(categories);
     } catch (e) {
       console.log(e);
-      res.status(400).json({ errors: e.errors.map((err) => err.message) });
+      return res.status(400).json({ errors: e.errors.map((err) => err.message) });
     }
   }
 
@@ -56,7 +56,7 @@ class CategoryController {
       return res.json({ id, name });
     } catch (e) {
       console.log(e);
-      res.status(400).json({ errors: e.errors.map((err) => err.message) });
+      return res.status(400).json({ errors: e.errors.map((err) => err.message) });
     }
   }
 
