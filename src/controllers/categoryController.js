@@ -8,7 +8,7 @@ class CategoryController {
       const { name } = newCategory;
       return res.json({ name });
     } catch (e) {
-      console.log(e);
+      console.log(`erro ${e}`);
       return res.status(400).json({ "error": e });
     }
   }
